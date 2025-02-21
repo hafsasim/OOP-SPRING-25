@@ -4,7 +4,7 @@ using namespace std;
 class car{
     string brand;
     string model;
-    double rentalPrice;
+    double price;
     bool status;
     
     public:
