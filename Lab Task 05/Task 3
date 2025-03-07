@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Employee {
+private:
+    string name;
+    string designation;
+
+public:
+    Employee(string name, string designation) : name(name), designation(designation) {}
+
+    void displayEmployee() {
+        cout << "Employee Name: " << name << endl;
+        cout << "Designation: " << designation << endl;
+    }
+
+    string getName() { return name; }
+    string getDesignation() { return designation; }
+};
+
+class Project {
+private:
+    string title;
+    string deadline;
+    vector<Employee*> employees;
+
+public:
+    Project(string title, string deadline) : title(title), deadline(deadline) {}
+
+    void addEmployee(Employee* emp) {
+        employees.push_back(emp);
+        cout << emp->getName() << " added to project: " << title << endl;
+    }
+
+    void viewProjectDetails() {
+        cout << "\nProject Title: " << title << endl;
+        cout << "Deadline: " << deadline << endl;
+        cout << "Assigned Employees: " << endl;
+        for (auto emp : employees) {
+            emp->displayEmployee();
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    Employee emp1("Hafsa", "Manager");
+    Employee emp2("Nimra", "Assistant");
+    Employee emp3("Shorouq", "Intern");
+
+    Project project1("AI Research", "March 20, 2025");
+    Project project2("Cybersecurity Analysis", "April 10, 2025");
+
+    project1.addEmployee(&emp1);
+    project1.addEmployee(&emp2);
+
+    project2.addEmployee(&emp2);
+    project2.addEmployee(&emp3);
+
+    cout << "\nProject Details:\n";
+    project1.viewProjectDetails();
+    project2.viewProjectDetails();
+
+    return 0;
+}
