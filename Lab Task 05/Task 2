@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+private:
+    string name;
+    int studentId;
+    int* examScores;
+    int scoreCount;
+    int count;
+
+public:
+    Student(string name, int studentId) : name(name), studentId(studentId), count(0), scoreCount(5) {
+        examScores = new int[scoreCount];
+    }
+
+    int getStudentId() { return studentId; }
+    string getName() { return name; }
+
+    void addExamScores(int es) {
+        if (count < scoreCount) {
+            examScores[count++] = es;
+            cout << "Score added successfully" << endl;
+        } else {
+            cout << "Score list is full" << endl;
+        }
+    }
+
+    void studentDetails() {
+        cout << "Name: " << name << endl;
+        cout << "Student ID: " << studentId << endl;
+        cout << "Exam Scores: ";
+        for (int i = 0; i < count; i++) {
+            cout << examScores[i] << " ";
+        }
+        cout << endl;
+    }
+
+    ~Student() {
+        delete[] examScores;
+    }
+
+    Student(const Student& st) {
+        name = st.name;
+        studentId = st.studentId;
+        scoreCount = st.scoreCount;
+        count = st.count;
+        examScores = new int[scoreCount];
+        for (int i = 0; i < count; i++) {
+            examScores[i] = st.examScores[i];
+        }
+    }
+};
+
+int main() {
+    Student Hafsa("HAFSA", 825);
+    Hafsa.addExamScores(23);
+    Hafsa.addExamScores(25);
+    Hafsa.addExamScores(25);
+
+    cout << "\nOriginal Student:\n";
+    Hafsa.studentDetails();
+
+    Student Shorouq = Hafsa;
+
+    cout << "\nCopied Student Before Adding More Scores:\n";
+    Shorouq.studentDetails();
+
+    Shorouq.addExamScores(22);
+    Shorouq.addExamScores(10);
+    Shorouq.addExamScores(27);
+
+    cout << "\nCopied Student After Adding More Scores:\n";
+    Shorouq.studentDetails();
+
+    return 0;
+}
