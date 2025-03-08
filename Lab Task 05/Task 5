@@ -1,0 +1,132 @@
+#include <iostream>
+using namespace std;
+
+class Hospital;
+
+class Doctor {
+private:
+    string name;
+    string specialization;
+    int experience;
+    Hospital* hospitals[10];
+    int hospitalCount;
+
+public:
+    Doctor(string docN, string docS, int docE) {
+        name = docN;
+        specialization = docS;
+        experience = docE;
+        hospitalCount = 0;
+    }
+    
+    void assignToHospital(Hospital* hospital);
+    void displayInfo();
+    
+    string getName() { 
+        return name; 
+    }
+    string getSpecialization() { 
+        return specialization; 
+    }
+    int getExperience() { 
+        return experience; 
+    }
+};
+
+class Hospital {
+private:
+    string name;
+    string location;
+    Doctor* doctors[100];
+    int doctorCount;
+
+public:
+    Hospital(string hospN, string hospL) {
+        name = hospN;
+        location = hospL;
+        doctorCount = 0;
+    }
+    
+    void addDoctor(Doctor* doctor) {
+        for (int i = 0; i < doctorCount; i++) {
+            if (doctors[i] == doctor) {
+                return;
+            }
+        }
+        if (doctorCount < 100) {
+            doctors[doctorCount++] = doctor;
+        }
+    }
+    
+    void displayDetails() {
+        cout << "\nHospital: " << name << endl;
+        cout << "Location: " << location << endl;
+        cout << "Doctors currently working here:" << endl;
+        
+        if (doctorCount == 0) {
+            cout << "  No doctors currently assigned" << endl;
+        } else {
+            for (int i = 0; i < doctorCount; i++) {
+                cout << "  - Dr. " << doctors[i]->getName() << " (" 
+                     << doctors[i]->getSpecialization() << ")" << endl;
+            }
+        }
+        cout << endl;
+    }
+
+    string getName() { 
+        return name; 
+    }
+};
+
+void Doctor::assignToHospital(Hospital* hospital) {
+    for (int i = 0; i < hospitalCount; i++) {
+        if (hospitals[i] == hospital) {
+            return;
+        }
+    }
+    if (hospitalCount < 10) {
+        hospitals[hospitalCount++] = hospital;
+        hospital->addDoctor(this);
+    }
+}
+
+void Doctor::displayInfo() {
+    cout << "\nDr. " << name << ", " << specialization << ", " 
+         << experience << " years of experience" << endl;
+    cout << "Working at hospitals:" << endl;
+    
+    if (hospitalCount == 0) {
+        cout << "  Not assigned to any hospital yet" << endl;
+    } else {
+        for (int i = 0; i < hospitalCount; i++) {
+            cout << "  - " << hospitals[i]->getName() << endl;
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    Doctor drHafsa("Hafsa", "Dermatology", 10);
+    Doctor drYusra("Yusra", "Orthopedics", 14);
+    Doctor drBilal("Bilal", "General Surgery", 20);
+    
+    Hospital indus("Indus Hospital", "Korangi");
+    Hospital southCity("South City Hospital", "Clifton");
+    
+    drHafsa.assignToHospital(&indus);
+    drBilal.assignToHospital(&southCity);
+    drYusra.assignToHospital(&indus);
+    drYusra.assignToHospital(&southCity);
+
+    cout << "\n===== DOCTOR PROFILES =====" << endl;
+    drHafsa.displayInfo();
+    drYusra.displayInfo();
+    drBilal.displayInfo();
+
+    cout << "\n===== HOSPITAL INFORMATION =====" << endl;
+    indus.displayDetails();
+    southCity.displayDetails();
+    
+    return 0;
+}
