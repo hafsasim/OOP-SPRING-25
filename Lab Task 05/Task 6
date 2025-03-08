@@ -1,0 +1,86 @@
+#include <iostream>
+using namespace std;
+
+class Level
+{
+    string name;
+    int difficulty;
+
+public:
+    Level(string n, int d) : name(n), difficulty(d) {}
+    void display()
+    {
+        cout << "Level: " << name << endl;
+        cout << "Difficulty: " << difficulty << endl;
+    }
+};
+
+class VideoGame
+{
+    string title;
+    string genre;
+    int numberOfLevels;
+    Level **levels;
+
+public:
+    VideoGame(string t, string g, int num) : title(t), genre(g), numberOfLevels(num)
+    {
+        levels = new Level *[num];
+    }
+    ~VideoGame() { delete[] levels; }
+    void addLevel(Level *l, int index)
+    {
+        if (index < numberOfLevels)
+            levels[index] = l;
+    }
+    void display()
+    {
+        cout << "\n\n......VIDEO GAME......\n";
+        cout << "Title: " << title << endl;
+        cout << "Genre: " << genre << endl;
+        cout << "Number of Levels: " << numberOfLevels << endl;
+        cout << "\n...LEVELS...\n";
+        for (int i = 0; i < numberOfLevels; i++)
+        {
+            cout << "\nLevel # " << i + 1 << endl;
+            levels[i]->display();
+        }
+    }
+};
+
+int main()
+{
+    string title, genre;
+    int numLevels;
+
+    cout << "Enter game title: ";
+    getline(cin, title);
+    cout << "Enter game genre: ";
+    getline(cin, genre);
+    cout << "Enter number of levels: ";
+    cin >> numLevels;
+
+    VideoGame game(title, genre, numLevels);
+
+    Level **levels = new Level *[numLevels];
+    for (int i = 0; i < numLevels; i++)
+    {
+        string levelName;
+        int difficulty;
+        cout << "\nEnter name for level " << i + 1 << ": ";
+        cin.ignore();
+        getline(cin, levelName);
+        cout << "Enter difficulty for level " << i + 1 << ": ";
+        cin >> difficulty;
+        levels[i] = new Level(levelName, difficulty);
+        game.addLevel(levels[i], i);
+    }
+
+    game.display();
+
+    for (int i = 0; i < numLevels; i++)
+        delete levels[i];
+    delete[] levels;
+
+    return 0;
+}
