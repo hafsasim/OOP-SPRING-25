@@ -1,0 +1,80 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+class Product{
+  public:
+  int id;
+  string name;
+  int quantity;
+
+  Product(int id, string name, int quantity) : id(id), name(name), quantity(quantity) {}
+
+  void showProduct(){
+    cout << "Product Id: " << id << endl;
+    cout << "Product name: " << name << endl;
+    cout << "Product quantity: " << quantity << endl;
+  }
+};
+
+class Inventory{
+ public:
+ Product* product[10];
+ int count;
+ 
+ Inventory() { count = 0; }
+ void addProduct(Product* p){
+   if(count < 10 ){
+    product[count++] = p;
+    cout << p->name << " added successfully!" << endl;
+   } else {
+    cout << "Inventory is full!" << endl;
+   }
+ }
+
+ void searchProduct(){
+    int pId;
+    cout << "\nEnter Product Id to search: ";
+    cin >> pId;
+    bool found = false;
+    for(int i = 0; i < count; i++){
+        if(product[i]->id == pId){
+            cout << "\nProduct Found Successfully!" << endl;
+            product[i]->showProduct();
+            found = true;
+            break;
+        }
+    }
+    if(!found){
+        cout << "\nProduct Not Found!" << endl;
+    }
+ }
+
+ void sortProduct(){
+    sort(product, product + count, [](Product* a, Product* b) {
+        return a->name < b->name;
+    });
+
+    cout << "\nSorted Products:\n";
+    for(int i = 0; i < count; i++){
+        product[i]->showProduct();
+    }
+ }
+};
+
+int main(){
+    Product fridge(101, "Fridge", 20);
+    Product microwave(102, "Microwave", 15);
+    Product oven(103, "Oven", 10);
+
+    Inventory HomeAppliances;
+    HomeAppliances.addProduct(&fridge);
+    HomeAppliances.addProduct(&microwave);
+    HomeAppliances.addProduct(&oven);
+
+    HomeAppliances.searchProduct();
+    cout << "\n";
+    HomeAppliances.sortProduct();
+
+    return 0;
+}
