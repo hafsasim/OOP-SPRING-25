@@ -1,0 +1,111 @@
+#include <iostream>
+using namespace std;
+
+class Device {
+protected:
+    int deviceId;
+    bool status;
+    string name;
+    string location;
+
+public:
+    Device(int id, string n, string loc) 
+        : deviceId(id), name(n), status(false), location(loc) {}
+
+    virtual void turnOn() {
+        status = true;
+        cout << name << " is now ON.\n";
+    }
+
+    virtual void turnOff() {
+        status = false;
+        cout << name << " is now OFF.\n";
+    }
+
+    virtual bool getStatus() const {
+        return status;
+    }
+
+    virtual void display() const {
+        cout << "\nDevice ID: " << deviceId << "\n"
+             << "Device Name: " << name << "\n"
+             << "Status: " << (status ? "On" : "Off") << "\n"
+             << "Location: " << location << "\n";
+    }
+
+    virtual ~Device() {}
+};
+
+class Light : public Device {
+    int brightnessLevel;
+    string colorMode;
+
+public:
+    Light(int id, string n, string loc, int brightness, string color) 
+        : Device(id, n, loc), brightnessLevel(brightness), colorMode(color) {}
+
+    void display() const override {
+        Device::display();  
+        cout << "Brightness Level: " << brightnessLevel << "\n"
+             << "Color Mode: " << colorMode << "\n";
+    }
+};
+
+class Thermostat : public Device {
+    int temp;
+    int targetTemp;
+    string mode;
+
+public:
+    Thermostat(int id, string n, string loc, int t, int target, string m) 
+        : Device(id, n, loc), temp(t), targetTemp(target), mode(m) {}
+
+    bool getStatus() const override {
+        cout << "\nCurrent Temperature: " << temp << "°C\n"
+             << "Target Temperature: " << targetTemp << "°C\n"
+             << "Mode: " << mode << "\n";
+        return status;
+    }
+};
+
+class SecurityCamera : public Device {
+    bool isRecording;
+    bool isNightVisionOn;
+    int resolution;
+
+public:
+    SecurityCamera(int id, string n, string loc, int res) 
+        : Device(id, n, loc), resolution(res), isRecording(false), isNightVisionOn(false) {}
+
+    void turnOn() override {
+        isRecording = true;
+        status = true;
+        cout << name << " is now recording.\n";
+    }
+
+    void display() const override {
+        Device::display();
+        cout << "Resolution: " << resolution << "p\n"
+             << "Recording: " << (isRecording ? "Yes" : "No") << "\n"
+             << "Night Vision: " << (isNightVisionOn ? "Enabled" : "Disabled") << "\n";
+    }
+};
+
+class SmartPlug : public Device {
+    int powerConsumption;
+    string timer;
+
+public:
+    SmartPlug(int id, string n, string loc, int power, string t) 
+        : Device(id, n, loc), powerConsumption(power), timer(t) {}
+
+    void turnOff() override {
+        status = false;
+        cout << name << " turned off. Power Consumption: " << powerConsumption << "W\n"
+             << "Timer Setting: " << timer << "\n";
+    }
+};
+
+int main() {
+    return 0;
+}
