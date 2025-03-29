@@ -1,0 +1,85 @@
+#include <iostream>
+using namespace std;
+
+class Character {
+protected:
+    int characterID;
+    int level;
+    int healthPoints;
+    string name, weaponType;
+public:
+    Character(int id, string n, int lvl, int hp, string weapon)
+        : characterID(id), name(n), level(lvl), healthPoints(hp), weaponType(weapon) {}
+
+    virtual void attack() {
+        cout << name << " attacks with " << weaponType << "!" << endl;
+    }
+
+    virtual void defend() {
+        cout << name << " defends using " << weaponType << "!" << endl;
+    }
+
+    virtual void displayStats() {
+        cout << "ID: " << characterID << "\nName: " << name << "\nLevel: " << level
+             << "\nHealth Points: " << healthPoints << "\nWeapon: " << weaponType << endl;
+    }
+};
+
+class Warrior : public Character {
+    int armorStrength, meleeDamage;
+public:
+    Warrior(int id, string n, int lvl, int hp, string weapon, int armor, int damage)
+        : Character(id, n, lvl, hp, weapon), armorStrength(armor), meleeDamage(damage) {}
+
+    void attack() override {
+        cout << name << " swings sword with " << meleeDamage << " damage!" << endl;
+    }
+};
+
+class Mage : public Character {
+    int manaPoints, spellPower;
+public:
+    Mage(int id, string n, int lvl, int hp, string weapon, int mana, int spell)
+        : Character(id, n, lvl, hp, weapon), manaPoints(mana), spellPower(spell) {}
+
+    void defend() override {
+        cout << name << " casts a magical barrier using " << manaPoints << " mana points!" << endl;
+    }
+};
+
+class Archer : public Character {
+    int arrowCount, rangedAccuracy;
+public:
+    Archer(int id, string n, int lvl, int hp, string weapon, int arrows, int accuracy)
+        : Character(id, n, lvl, hp, weapon), arrowCount(arrows), rangedAccuracy(accuracy) {}
+
+    void attack() override {
+        cout << name << " shoots an arrow with " << rangedAccuracy << "% accuracy!" << endl;
+    }
+};
+
+class Rogue : public Character {
+    int stealthLevel, agility;
+public:
+    Rogue(int id, string n, int lvl, int hp, string weapon, int stealth, int agi)
+        : Character(id, n, lvl, hp, weapon), stealthLevel(stealth), agility(agi) {}
+
+    void displayStats() override {
+        cout << "Rogue Stats\nStealth Level: " << stealthLevel << "\nAgility: " << agility << endl;
+    }
+};
+
+int main() {
+    Warrior w1(101, "Arthur", 25, 150, "Great Sword", 70, 50);
+    Mage m1(102, "Merlin", 20, 100, "Magic Staff", 200, 90);
+    Archer a1(103, "Robin", 22, 120, "Long Bow", 30, 85);
+    Rogue r1(104, "Ezio", 28, 110, "Hidden Blade", 95, 75);
+
+    cout << "\n--- Character Stats ---\n";
+    w1.attack();
+    m1.defend();
+    a1.attack();
+    r1.displayStats();
+
+    return 0;
+}
