@@ -1,0 +1,57 @@
+#include <iostream>
+using namespace std;
+class Vector2D
+{
+private:
+    int y;
+    int x;
+public:
+    Vector2D() : x(0), y(0) {}
+    Vector2D(int x, int y) : x(x), y(y) {}
+
+    Vector2D operator+(const Vector2D &other) const
+    {
+        return Vector2D(x + other.x, y + other.y);
+    }
+
+    Vector2D operator-(const Vector2D &other) const
+    {
+        return Vector2D(x - other.x, y - other.y);
+    }
+
+    Vector2D operator*(int scalar) const
+    {
+        return Vector2D(scalar * x, scalar * y);
+    }
+
+    friend void dotProduct(const Vector2D &vectorA, const Vector2D &vectorB);
+    friend ostream &operator<<(ostream &out, const Vector2D &vec);
+};
+
+ostream &operator<<(ostream &out, const Vector2D &vec)
+{
+    out << vec.x << "i , " << vec.y << "j" << endl;
+    return out;
+}
+
+void dotProduct(const Vector2D &vectorA, const Vector2D &vectorB)
+{
+    int dot = vectorA.x * vectorB.x + vectorA.y * vectorB.y;
+    cout << "Dot product of vectorA and vectorB: " << dot << endl;
+}
+
+int main()
+{
+    Vector2D vector1(4, 5);
+    Vector2D vector2(3, 3);
+    Vector2D sumResult = vector1 + vector2;
+    Vector2D diffResult = vector1 - vector2;
+    Vector2D scaledResult10 = vector1 * 10;
+    cout << "Vector 1: " << vector1;
+    cout << "Vector 2: " << vector2;
+    cout << "Vector1 + Vector2: " << sumResult;
+    cout << "Vector1 - Vector2: " << diffResult;
+    cout << "Vector1 * 10: " << scaledResult10;
+    dotProduct(vector1, vector2);
+    return 0;
+}
