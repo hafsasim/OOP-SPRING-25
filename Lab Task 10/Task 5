@@ -1,62 +1,52 @@
 #include <iostream>
-#include <exception>
+#include <fstream>
+#include <sstream>
+#include <string>
 using namespace std;
 
-class NegativeStockException : public exception
-{
-};
+int main() {
+    ifstream in("vehicle3.txt");
 
-class OverCapacityException : public exception
-{
-};
-template <typename T>
-class InventoryItem
-{
-private:
-    T stock;
-    T maxCapacity;
-
-public:
-    InventoryItem(T maxCap) : stock(0), maxCapacity(maxCap) {}
-
-    void setStock(T value)
-    {
-        if (value < 0)
-            throw NegativeStockException();
-        if (value > maxCapacity)
-            throw OverCapacityException();
-
-        stock = value;
+    if (!in) {
+        cerr << "Error: Could not open file 'vehicles.txt'" << endl;
+        return 1;
     }
+    string str;
+    while (getline(in, str)) {
+        if (str.empty() || str[0] == '#') {
+            continue;
+        }
+        istringstream ss(str);
+        string type,rest;
 
-    T getStock() const
-    {
-        return stock;
-    }
-};
-int main()
-{
-    InventoryItem<int> item(100);
+        getline(ss, type, ',');
+        getline (ss,rest);
 
-    try
-    {
-        cout << "Attempting to set stock to -5" << endl;
-        item.setStock(-5);
+        if (type =="AutonomousCar")
+        {
+            string sub = rest.substr(rest.find(":")+1, rest.find(",")-1);
+            cout << "auto car version:"<<sub << endl;
+        }else if (type =="Electric Vehicle")
+        {
+            string sub = rest.substr(rest.find(":")+1, rest.find(",")-1);
+            cout << "electric car battery:"<<sub<<endl;
+        }else if (type == "HybridTruck") {
+            size_t colon1 = rest.find(":");
+            size_t pipe = rest.find("|");
+            string sub1 = rest.substr(colon1 + 1, pipe - colon1 - 1);
+        
+            size_t colon2 = rest.find(":", pipe); 
+            size_t comma2 = rest.find(",", colon2); 
+            string sub2 = rest.substr(colon2 + 1, comma2 - (colon2 + 1)); 
+        
+            int r1 = stoi(sub1);
+            int r2 = stoi(sub2);
+            cout << "cargo:" << r1 << "|";
+            cout << " battery:" << r2 << endl;
+        }else {
+            cout << "error"<<endl;
+        }  
     }
-    catch (const NegativeStockException &e)
-    {
-        cout << "Caught NegativeStockException: " << e.what() << endl;
-    }
-
-    try
-    {
-        cout << "Attempting to set stock to 120 (max 100)" << endl;
-        item.setStock(120);
-    }
-    catch (const OverCapacityException &e)
-    {
-        cout << "Caught OverCapacityException: " << e.what() << endl;
-    }
-
+    in.close();
     return 0;
 }
