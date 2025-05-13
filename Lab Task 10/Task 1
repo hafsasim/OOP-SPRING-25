@@ -1,26 +1,26 @@
 #include <iostream>
-#include <exception>
 #include <string>
+#include <fstream>
 using namespace std;
-
-template <typename T>
-class DimensionMismatchException : public exception
+int main()
 {
-    string message;
-
-public:
-    DimensionMismatchException(T r1, T c1, T r2, T c2)
+    ifstream file;
+    string readFile;
+    file.open("vehicles.txt");
+    if (file.is_open())
     {
-        message = "DimensionMismatchException - Matrices must have same dimensions (" +
-                  to_string(r1) + "x" + to_string(c1) + " vs " +
-                  to_string(r2) + "x" + to_string(c2) + ")!";
+        while (getline(file, readFile))
+        {
+            cout << readFile << endl;
+        }
+        file.close();
     }
-
-    const char* what() const throw()
+    else
     {
-        return message.c_str();
+        cerr << "Unable to open the vehicles file." << endl;
+        exit(1);
     }
-};
+}
 
 template <class T>
 class Matrix
